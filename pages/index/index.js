@@ -91,15 +91,15 @@ Page({
   //   });
   //   this.getGoodsList(this.data.activeCategoryId);
   // },
-  // toDetailsTap: function(e) {
-  //   wx.navigateTo({
-  //     url: "/pages/goods-details/index?id=" + e.currentTarget.dataset.id
-  //   })
-  // },
+  toDetailsTap: function(e) {
+    wx.navigateTo({
+      url: "/pages/goods-details/goods-details?id=" + e.currentTarget.dataset.id
+    })
+  },
   // tapBanner: function(e) {
   //   if (e.currentTarget.dataset.id != 0) {
   //     wx.navigateTo({
-  //       url: "/pages/goods-details/index?id=" + e.currentTarget.dataset.id
+  //       url: "/pages/goods-details/goods-details?id=" + e.currentTarget.dataset.id
   //     })
   //   }
   // },
