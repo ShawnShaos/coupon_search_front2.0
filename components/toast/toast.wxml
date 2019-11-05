@@ -1,0 +1,5 @@
+<!--components/toast/toast.wxml-->
+  <view class="myToast" animation="{{animationData}}"  style="opacity:0;margin-left:{{marginleft}}px">
+  {{content}}
+  </view>
+

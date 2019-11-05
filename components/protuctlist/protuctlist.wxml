@@ -1,0 +1,23 @@
+<view bindtap="toDetailsTap" class="goods-box" data-id="undefined">
+  <view class="img-box">
+    <image class="image" mode="aspectFill" src="{{goods_thumbnail_url}}" role="img"></image>
+  </view>
+  <view class="goods-title">{{goods_name}}</view>
+  <view class="coupon">
+    <view class="coupon_price">
+      <span>{{coupon_discount/100}}</span>
+    </view>
+    <view class="coupon_middle"></view>
+    <view class="coupon_right"></view>
+    <span>领券</span>
+  </view>
+  <view class="price-and">
+    <view class="price-totle">
+      <view class="price-now">¥{{min_group_price/100}}</view>
+      <view class="pice-init"> ¥{{min_normal_price/100}}</view>
+    </view>
+    <view class="other-options">
+      <view class="sales-volume">销量:{{sales_tip}}</view>
+    </view>
+  </view>
+</view>

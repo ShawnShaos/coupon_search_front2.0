@@ -1,0 +1,13 @@
+/* components/toast/toast.wxss */
+.myToast{
+  padding:6px;  
+  border-radius:5px;
+  background-color: rgb(114,113,113);
+  color:rgb(255,255,255);
+  font-size: 30rpx;
+  text-align: center;
+  position: fixed;
+  bottom:600rpx;
+  opacity: 0.85;
+  width:100px;
+}
