@@ -51,11 +51,20 @@ module.exports = {
   },
 
 
-  TopGoodsListQuery(params){
+  TopGoodsListQuery(params){  //热销商品查询
     return http({
       url: url.TopGoodsListQuery,
       method:params.method,
       data: params
     })
+  },
+
+  GetGoodsDetail(params){  //获取商品详情
+    return http({
+      url: url.TopGoodsListQuery,
+      method: params.method,
+      data: params
+    })
   }
+
 }

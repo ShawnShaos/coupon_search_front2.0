@@ -3,9 +3,9 @@
 // const WxParse = require('../../wxParse/wxParse.js');
 // const CONFIG = require('../../config.js')
 // const AUTH = require('../../utils/auth')
- const SelectSizePrefix = "选择："
+const SelectSizePrefix = "选择："
 
-let videoAd = null; // 视频激励广告
+const api = require("../../utils/api")
 
 Page({
   data: {
@@ -30,47 +30,13 @@ Page({
     openShare: false
   },
   async onLoad(e) {
-    if (e && e.scene) {
-      const scene = decodeURIComponent(e.scene) // 处理扫码进商品详情页面的逻辑
-      if (scene) {
-        e.id = scene.split(',')[0]
-        wx.setStorageSync('referrer', scene.split(',')[1])
-      }
-    }
     this.data.goodsId = e.id
     const that = this
     this.data.kjJoinUid = e.kjJoinUid
     // 获取购物车数据
-    wx.getStorage({
-      key: 'shopCarInfo',
-      success: function(res) {
-        that.setData({
-          shopCarInfo: res.data,
-          shopNum: res.data.shopNum,
-          curuid: wx.getStorageSync('uid')
-        });
-      }
-    })
-    this.reputation(e.id);
-    // 视频激励广告信息
-    if (wx.createRewardedVideoAd) {
-      videoAd = wx.createRewardedVideoAd({
-        adUnitId: 'adunit-12c4520ad7c062eb'
-      })
-      videoAd.onLoad(() => { console.log('-----------onLoad') })
-      videoAd.onError((err) => { })
-      videoAd.onClose((res) => { 
-        if (res && res.isEnded) {
-          that.helpKanjiaDone();
-        } else {
-          wx.showModal({
-            title: '提示',
-            content: '完整观看完视频才能砍价',
-            showCancel: false
-          })
-        }
-      })
-    }
+
+    //this.reputation(e.id); //获取商品详情
+    this.reputation(13863233); //获取商品详情
   },
   // onShow (){
   //   this.getGoodsDetailAndKanjieInfo(this.data.goodsId)
@@ -502,18 +468,19 @@ Page({
   //   }
   //   return _data
   // },
-  // reputation: function(goodsId) {
-  //   var that = this;
-  //   WXAPI.goodsReputation({
-  //     goodsId: goodsId
-  //   }).then(function(res) {
-  //     if (res.code == 0) {
-  //       that.setData({
-  //         reputation: res.data
-  //       });
-  //     }
-  //   })
-  // },
+  reputation: function(goodsId) { //获取商品详情
+    var that = this;
+  
+    api.GetGoodsDetail({
+      method: "GET",
+      data:{
+        goods_id: goodsId
+      }
+    }).then(function(res){
+        console.log(res)
+    })
+
+  },
   // pingtuanList: function(goodsId) {
   //   var that = this;
   //   WXAPI.pingtuanList({
