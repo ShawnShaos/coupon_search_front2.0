@@ -5,7 +5,6 @@ const apiUrl = "http://localhost:8080"; //服务器api地址
 var requestApi;
 const http = (params) => {
   //返回promise 对象
-  console.log(params.method)
   return new Promise((resolve, reject) => {
     requestApi = wx.request({
       url: apiUrl + params.url, //服务器url+参数中携带的接口具体地址

@@ -27,16 +27,55 @@ Page({
     shopType: "addShopCar", //购物类型，加入购物车或立即购买，默认为加入购物车
     currentPages: undefined,
 
-    openShare: false
+    openShare: false,
   },
   async onLoad(e) {
-    this.data.goodsId = e.id
-    const that = this
-    this.data.kjJoinUid = e.kjJoinUid
-    // 获取购物车数据
+    //this.data.goodsId = e.goodsId
+    this.data.goodsId = "43324470870"
 
-    //this.reputation(e.id); //获取商品详情
-    this.reputation(13863233); //获取商品详情
+   // this.reputation(e.id); //获取商品详情
+    this.reputation("43324470870"); //获取商品详情
+  },
+  onShareAppMessage: function (res) {
+    return {
+      title: this.data.goodsDetail.goods_name,
+      path: 'pages/goods-details/goods-details?goodsId=' + this.data.goodsId,
+      success: function (res) {
+        console.log('成功', res)
+      }
+    }
+  },
+  toPdd(){
+    var that = this;
+
+    wx.showLoading({
+      title: '加载中',
+    });
+
+    //获取推广链接并跳转到pdd
+    api.GetProByGid({
+       method: "GET",
+      data:{
+        goods_id: that.data.goodsId
+      }
+    }).then(function(e){
+      wx.hideLoading();
+      if (e.data.error_response == undefined) {
+        var path = e.data.goods_promotion_url_generate_response.goods_promotion_url_list[0].we_app_info.page_path
+        console.log(path);
+          wx.navigateToMiniProgram({
+              appId: api.appId,
+              path: path,
+              success(res) {
+              
+              }
+            })
+      }else{
+
+      }
+    })
+
+  
   },
   // onShow (){
   //   this.getGoodsDetailAndKanjieInfo(this.data.goodsId)
@@ -477,9 +516,13 @@ Page({
         goods_id: goodsId
       }
     }).then(function(res){
-        console.log(res)
+     
+      if (res.data.error_response == undefined){  
+          that.setData({
+            goodsDetail:res.data.goods_detail_response.goods_details[0]
+          })
+        }
     })
-
   },
   // pingtuanList: function(goodsId) {
   //   var that = this;

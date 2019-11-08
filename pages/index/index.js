@@ -93,7 +93,7 @@ Page({
   // },
   toDetailsTap: function(e) {
     wx.navigateTo({
-      url: "/pages/goods-details/goods-details?id=" + e.currentTarget.dataset.id
+      url: "/pages/goods-details/goods-details?goodsId=" + e.currentTarget.dataset.id
     })
   },
   // tapBanner: function(e) {

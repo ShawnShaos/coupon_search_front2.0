@@ -70,7 +70,8 @@ swiper-item image {
   width: 30px;
   height: 30px;
   position: absolute;
-  top: 0;
+top: 6rpx;
+
   left: 0;
   z-index: 1;
   margin: 10px 10px 0 5px;
@@ -207,7 +208,8 @@ swiper-item image {
 .footer-box .now-buy{
   text-align: center;
   height: 100%;
-  width: 250rpx;
+  /* width: 250rpx; */
+  width: 100%;
   line-height: 100rpx;
   background-color: #e64340;
   color:#fff;
@@ -428,4 +430,119 @@ swiper-item image {
   width:300rpx;
   height:300rpx;
   margin-top: 50rpx;
+}
+
+
+/* 优惠券样式 */
+
+.coupon-item{
+  width: 100%;
+  background-color: white;
+  padding: 12rpx 0rpx;
+  margin-bottom: 20rpx;
+}
+
+.coupon-item .nick {
+	padding:.66% 0;
+	color:#fff;
+}
+.coupon-item .coupon-money {
+	width:100%;
+	display:-webkit-box;
+	display:-webkit-flex;
+	display:flex;
+	font-size:1.2rem;
+	align-items:center;
+  margin-left: 100rpx;
+}
+.coupon-item .coupon-money em {
+	font-size:3.8rem;
+}
+.coupon-item .coupon-money .lay:last-child {
+	flex:1;
+	padding:0 3%;
+	line-height:1.66rem;
+}
+
+.style-one .info-box,.style-two .info-box,.style-three .info-box,.style-four .info-box,.style-five .info-box,.style-six .info-box,.style-seven .info-box {
+	-webkit-box:1;
+	-webkit-flex:1;
+	flex:1;
+	padding:0 3% 0 10%;
+	position:relative;
+}
+
+.style-one,.style-two,.style-three,.style-four,.style-five,.style-six,.style-seven {
+	width:100%;
+	height:200rpx;
+	position:relative;
+	margin:5% 0;
+	display:-webkit-box;
+	display:-webkit-flex;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	background-color:#fff;
+	border:1px solid #E5004F;
+}
+
+.style-five.have .get-btn span {
+	width:5rem;
+	font-size:1.5rem;
+	color:#fff;
+}
+
+.style-five {
+	background-color:#E5004F;
+	-webkit-border-radius:1rem;
+	border-radius:1rem;
+	border:none;
+	color:#fff;
+}
+.style-five .get-btn {
+	width:28%;
+	height:175rpx;
+	position:relative;
+	-webkit-perspective:180;
+	perspective:180;
+}
+.style-five .get-btn:after {
+	content:"";
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	background-color:#F8B551;
+	transform:rotateY(-28deg);
+	z-index:1;
+	-webkit-border-radius:.66rem;
+	border-radius:.66rem;
+	-webkit-box-shadow:-3px 0 8px #793030;
+	box-shadow:-3px 0 8px #793030;
+}
+.style-five .get-btn span {
+	width:4rem;
+	word-break:break-all;
+	font-size:1.8rem;
+	color:#454545;
+	position:absolute;
+	top:50%;
+	left:50%;
+	-webkit-transform:translate(-30%,-50%);
+	transform:translate(-30%,-50%);
+	z-index:3;
+}
+
+.goods-prices{
+  display: flex;
+  align-items: flex-end;
+}
+
+.goods-prices  .quansou{
+  font-size: 18rpx;
+}
+
+.goods-prices  .price-old{
+  text-decoration:line-through;
 }
