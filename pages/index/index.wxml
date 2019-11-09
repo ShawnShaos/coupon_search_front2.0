@@ -11,7 +11,7 @@
 
 <scroll-view scroll-x class="bg-red nav" scroll-with-animation scroll-left="{{scrollLeft}}">
   <view class="cu-item" wx:for="{{categoies}}" wx:key bindtap="tabSelect" data-id="{{index}}">
-    <span class="{{index==TabCur?'nav_title':''}} "> {{item}} </span>
+    <span class="{{index==TabCur?'nav_title':''}} "> {{index}} </span>
   </view>
 </scroll-view>
 

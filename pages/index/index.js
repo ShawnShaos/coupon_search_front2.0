@@ -56,20 +56,28 @@ Page({
       type: 'image',
       url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg'
     }],
-    categoies:[
-      "精选","女装","男装", "水果", "食品", "美妆", "运动", "母婴", "电器", "鞋包", "家装", "百货"
-    ]
+    categoies:[{"食品":"1"}]
   },
   onLoad(){
     var that = this;
-    //获取商品标签列表
-    api.GoodsOptGet({
-      data:{
-        parent_opt_id:0
-      }
-    }).then(function(data){
-      console.log(data)
-    })
+
+    // //获取商品标签列表（自定义）
+    // api.GoodsOptGetByCustomize({
+    // }).then(function(data){
+    //   console.log(data)
+    //   // this.setData({
+    //   //   categoies: data
+    //   // })
+    // })
+
+    //获取商品标签列表（官方）
+    // api.GoodsOptGet({
+    //   data:{
+    //     parent_opt_id:0
+    //   }
+    // }).then(function(data){
+    //   console.log(data.goods_opt_get_response.goods_opt_list)
+    // })
 
     //获取商品爆款列表
     // api.TopGoodsListQuery({method:"GET"}).then(  
