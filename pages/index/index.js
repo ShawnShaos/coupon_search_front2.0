@@ -62,13 +62,23 @@ Page({
   },
   onLoad(){
     var that = this;
-    api.TopGoodsListQuery({method:"GET"}).then(
-      function(data){
-        console.log(data.data.top_goods_list_get_response.list)
-        that.setData({
-          goodsRecommend:data.data.top_goods_list_get_response.list
-        })
+    //获取商品标签列表
+    api.GoodsOptGet({
+      data:{
+        parent_opt_id:0
+      }
+    }).then(function(data){
+      console.log(data)
     })
+
+    //获取商品爆款列表
+    // api.TopGoodsListQuery({method:"GET"}).then(  
+    //   function(data){
+    //     console.log(data.data.top_goods_list_get_response.list)
+    //     that.setData({
+    //       goodsRecommend:data.data.top_goods_list_get_response.list
+    //     })
+    // })
   },
   tabSelect(e) {
     this.setData({
@@ -92,8 +102,9 @@ Page({
   //   this.getGoodsList(this.data.activeCategoryId);
   // },
   toDetailsTap: function(e) {
+    var goodsId = e.currentTarget.dataset.id;
     wx.navigateTo({
-      url: "/pages/goods-details/goods-details?goodsId=" + e.currentTarget.dataset.id
+      url: "/pages/goods-details/goods-details?goodsId=" + goodsId
     })
   },
   // tapBanner: function(e) {

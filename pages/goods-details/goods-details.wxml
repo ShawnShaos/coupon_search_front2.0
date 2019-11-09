@@ -1,6 +1,4 @@
-<cu-custom bgColor="bg-red">
-  <view slot="content">商品详情</view>
-</cu-custom>
+<cu-custom bgColor="bg-red" isCustom="{{true}}"><view slot="content">商品详情</view></cu-custom>
 <import src="../../wxParse/wxParse.wxml" />
 <view class="container">
   <view class="swiper-container" wx:if="{{goodsDetail.goods_gallery_urls.length>0}}">
@@ -18,14 +16,15 @@
       <button open-type="share">分享</button>
     </view>
     <view class="goods-prices">
-      <view class="goods-price" style="padding-left:35rpx;text-align: left">
-      <span>券后</span>
-      ¥ {{goodsDetail.min_group_price/100}}
-      <span class="price-old">¥{{goodsDetail.min_normal_price/100}}</span>
+      <view class="price-now">
+        <span>券后 </span>
+        ¥{{goodsDetail.min_group_price/100}}
       </view>
-      <view class="goods-price" style="color:#999;text-align: center;font-size:24rpx;">销量{{goodsDetail.sales_tip}}</view>
-      <view class="goods-price" style="color:#999;text-align: right;font-size:24rpx;">{{goodsDetail.mall_name}}</view>
+      <view class="store-name">{{goodsDetail.mall_name}}</view>
+      <view class="price-old">¥{{goodsDetail.min_normal_price/100}}</view>
+      <view class="sale-number">销量{{goodsDetail.sales_tip}}</view>
     </view>
+
   </view>
   <view class="coupon-item">
     <view class="style-five">

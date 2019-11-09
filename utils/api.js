@@ -15,7 +15,8 @@ var url = {
   wxUserInfo:"/wxUserInfo",  //第一次登录或重新执行登录逻辑
   TopGoodsListQuery:"/ddk/TopGoodsListQuery",  //获取爆款列表接口
   GetGoodsDetail:"/ddk/GetGoodsDetail",  //获取商品详情
-  GetProByGid:"/ddk/GetProByGid"  //获取商品推广链接
+  GetProByGid:"/ddk/GetProByGid",  //获取商品推广链接
+  GoodsOptGet:"/goods/GoodsOptGet"  //goods商品类目列表
 }
 module.exports = {
   appId : APPID,
@@ -80,4 +81,10 @@ module.exports = {
     })
   },
 
+  GoodsOptGet(params) {  //goods商品类目列表
+    return http({
+      url: url.GoodsOptGet,
+      data: params.data
+    })
+  }
 }

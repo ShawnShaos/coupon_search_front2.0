@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/goods-details/goods-details",
-    "pages/index/index"
+    "pages/index/index",
+    "pages/goods-details/goods-details"
   ],
   "window": {
     "backgroundTextStyle": "light",
