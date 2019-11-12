@@ -51,10 +51,8 @@ Page({
         goods_id: that.data.goodsId
       }
     }).then(function(e) {
-      wx.hideLoading();
       if (e.data.error_response == undefined) {
         var path = e.data.goods_promotion_url_generate_response.goods_promotion_url_list[0].we_app_info.page_path
-        console.log(path);
         wx.navigateToMiniProgram({
           appId: api.appId,
           path: path,

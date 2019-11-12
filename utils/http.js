@@ -17,6 +17,7 @@ const http = (params) => {
       // dataType: params.dataType || 'JSON',//返回的数据格式,默认为JSON，特殊格式可以在调用的时候传入参数
       responseType: params.responseType || 'text', //响应的数据类型
       success: function(res) {
+        wx.hideLoading(); //统一关闭加载弹窗
         //接口访问正常返回数据
         if (res.statusCode == 200) {
           resolve(res.data)

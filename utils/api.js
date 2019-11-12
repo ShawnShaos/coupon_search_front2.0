@@ -17,7 +17,9 @@ var url = {
   GetGoodsDetail:"/ddk/GetGoodsDetail",  //获取商品详情
   GetProByGid:"/ddk/GetProByGid",  //获取商品推广链接
   GoodsOptGet:"/goods/GoodsOptGet",  //goods商品类目列表
-  GoodsOptGetByCustomize:"/goods/GoodsOptGetByCustomize"  //goods商品类目列表(自定义)
+  GoodsOptGetByCustomize:"/goods/GoodsOptGetByCustomize",  //goods商品类目列表(自定义)
+  GoodsSearch: "/ddk/GoodsSearch", //根据标题搜索商品
+
 }
 module.exports = {
   appId : APPID,
@@ -92,6 +94,13 @@ module.exports = {
   GoodsOptGetByCustomize(params) {  //goods商品类目列表(自定义)
     return http({
       url: url.GoodsOptGetByCustomize,
+    })
+  },
+
+   GoodsSearch(params) {  //根据标题搜索商品
+    return http({
+      url: url.GoodsSearch,
+      data: params.data
     })
   }
 }

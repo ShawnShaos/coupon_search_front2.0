@@ -60,15 +60,13 @@ Page({
   },
   onLoad(){
     var that = this;
-
-    // //获取商品标签列表（自定义）
-    // api.GoodsOptGetByCustomize({
-    // }).then(function(data){
-    //   console.log(data)
-    //   // this.setData({
-    //   //   categoies: data
-    //   // })
-    // })
+    //获取商品标签列表（自定义）
+    api.GoodsOptGetByCustomize({
+    }).then(function(data){
+      that.setData({
+        categoies: data
+      })
+    })
 
     //获取商品标签列表（官方）
     // api.GoodsOptGet({
@@ -79,20 +77,46 @@ Page({
     //   console.log(data.goods_opt_get_response.goods_opt_list)
     // })
 
-    //获取商品爆款列表
-    // api.TopGoodsListQuery({method:"GET"}).then(  
-    //   function(data){
-    //     console.log(data.data.top_goods_list_get_response.list)
-    //     that.setData({
-    //       goodsRecommend:data.data.top_goods_list_get_response.list
-    //     })
-    // })
+    this.topGoodsListQuery()
+  },
+  topGoodsListQuery(){
+    var that = this;
+        //获取商品爆款列表
+    api.TopGoodsListQuery({method:"GET"}).then(  
+      function(data){
+        that.setData({
+          goodsRecommend:data.data.top_goods_list_get_response.list
+        })
+    })
   },
   tabSelect(e) {
+
+    wx.showLoading({
+      title: '加载中',
+    });
+
+    var that = this;
     this.setData({
       TabCur: e.currentTarget.dataset.id,
       scrollLeft: (e.currentTarget.dataset.id - 1) * 60
     })
+
+    var opt_id = e.currentTarget.dataset.opt_id
+
+    if (opt_id == 0){ //热搜排行榜
+      this.topGoodsListQuery()
+    }else{
+      api.GoodsSearch({
+        data: {
+          opt_id: e.currentTarget.dataset.opt_id   //分类栏目id
+        }
+      }).then(function (data) {
+        that.setData({
+          goodsRecommend: data.goods_search_response.goods_list
+        })
+      })
+    }
+
   },
 
   // tabClick: function(e) {
