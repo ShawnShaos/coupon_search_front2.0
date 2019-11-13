@@ -14,15 +14,15 @@ Page({
     userInfo: {},
     selectCurrent: 0,
     categories: [],
-    activeCategoryId: 0,  //分类id
+  
     goods: [],
-    
+
     scrollTop: 0,
     loadingMoreHidden: true,
 
     coupons: [],
 
-    curPage: 1,
+   
     pageSize: 20,
     cateScrollTop: 0,
     TabCur: 0,
@@ -56,13 +56,16 @@ Page({
       type: 'image',
       url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg'
     }],
-    categoies:[{"食品":"1"}]
+
+
+    categoies: [],
+    activeCategoryId: 0, //分类id
+    curPage: 1,
   },
-  onLoad(){
+  onLoad() {
     var that = this;
     //获取商品标签列表（自定义）
-    api.GoodsOptGetByCustomize({
-    }).then(function(data){
+    api.GoodsOptGetByCustomize({}).then(function(data) {
       that.setData({
         categoies: data
       })
@@ -79,18 +82,19 @@ Page({
 
     this.topGoodsListQuery()
   },
-  topGoodsListQuery(){
+  topGoodsListQuery() {
     var that = this;
-        //获取商品爆款列表
-    api.TopGoodsListQuery({method:"GET"}).then(  
-      function(data){
+    //获取商品爆款列表
+    api.TopGoodsListQuery({
+      method: "GET"
+    }).then(
+      function(data) {
         that.setData({
-          goodsRecommend:data.data.top_goods_list_get_response.list
+          goodsRecommend: data.data.top_goods_list_get_response.list
         })
-    })
+      })
   },
-  tabSelect(e) {
-
+  tabSelect(e) { //栏目分类标签
     wx.showLoading({
       title: '加载中',
     });
@@ -98,27 +102,31 @@ Page({
     var that = this;
     this.setData({
       TabCur: e.currentTarget.dataset.id,
-      scrollLeft: (e.currentTarget.dataset.id - 1) * 60
+      scrollLeft: (e.currentTarget.dataset.id - 1) * 60,
+      activeCategoryId: e.currentTarget.dataset.opt_id,
+      curPage: 1
     })
 
-    var opt_id = e.currentTarget.dataset.opt_id
+    this.goodsSearch({
+      opt_id: e.currentTarget.dataset.opt_id, //分类栏目id
+      page: 1
+    })
 
-    if (opt_id == 0){ //热搜排行榜
-      this.topGoodsListQuery()
-    }else{
+  },
+  goodsSearch: function(data) { //获取商品列表
+    var that = this;
+    if (data.opt_id == 0) { //热搜排行榜
+      this.topGoodsListQuery(data)
+    } else {
       api.GoodsSearch({
-        data: {
-          opt_id: e.currentTarget.dataset.opt_id   //分类栏目id
-        }
+        data: data
       }).then(function (data) {
         that.setData({
           goodsRecommend: data.goods_search_response.goods_list
         })
       })
-    }
-
+    };
   },
-
   // tabClick: function(e) {
   //   let offset = e.currentTarget.offsetLeft;
   //   if (offset > 150) {
@@ -302,37 +310,53 @@ Page({
   //   });
   //   this.getGoodsList(this.data.activeCategoryId);
   // },
-  // onReachBottom: function() {
-  //   this.setData({
-  //     curPage: this.data.curPage + 1
-  //   });
-  //   this.getGoodsList(this.data.activeCategoryId, true)
-  // },
-  // onPullDownRefresh: function() {
-  //   this.setData({
-  //     curPage: 1
-  //   });
-  //   this.getGoodsList(this.data.activeCategoryId)
-  //   wx.stopPullDownRefresh()
-  // },
+  onReachBottom: function() {
+    wx.showLoading({
+      title: '加载中...',
+    })
+    var curPage = this.data.curPage + 1;
+    var activeCategoryId = this.data.activeCategoryId;
+    this.setData({
+      curPage: curPage
+    });
+
+    this.goodsSearch({
+      opt_id: activeCategoryId, //分类栏目id
+      page: curPage
+    })
+  },
+  onPullDownRefresh: function() {
+    wx.showLoading({
+      title: '刷新中...',
+    })
+    var activeCategoryId = this.data.activeCategoryId;
+    this.setData({
+      curPage: 1
+    });
+    this.goodsSearch({
+      opt_id: activeCategoryId, //分类栏目id
+      page: 1
+    })
+    wx.stopPullDownRefresh()
+  },
   // // 以下为搜索框事件
-  showInput: function () {
+  showInput: function() {
     this.setData({
       inputShowed: true
     });
   },
-  hideInput: function () {
+  hideInput: function() {
     this.setData({
       inputVal: "",
       inputShowed: false
     });
   },
-  clearInput: function () {
+  clearInput: function() {
     this.setData({
       inputVal: ""
     });
   },
-  inputTyping: function (e) {
+  inputTyping: function(e) {
     this.setData({
       inputVal: e.detail.value
     });
