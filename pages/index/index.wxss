@@ -368,3 +368,7 @@ swiper-item image {
   color: red;
   padding: 8rpx;
 }
+
+.hiddenMap{
+  display: none
+}

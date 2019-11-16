@@ -14,7 +14,7 @@ Page({
     userInfo: {},
     selectCurrent: 0,
     categories: [],
-  
+
     goods: [],
 
     scrollTop: 0,
@@ -22,7 +22,7 @@ Page({
 
     coupons: [],
 
-   
+
     pageSize: 20,
     cateScrollTop: 0,
     TabCur: 0,
@@ -61,6 +61,10 @@ Page({
     categoies: [],
     activeCategoryId: 0, //分类id
     curPage: 1,
+    isShowMap: true, //是否显示轮播图和爆款推荐页以及排序选项
+    TabListCur: 0,
+    isShowSort:false, //是否显示销量价格排序导航
+    priceUp: false //价格排序设置，默认升序
   },
   onLoad() {
     var that = this;
@@ -80,25 +84,33 @@ Page({
     //   console.log(data.goods_opt_get_response.goods_opt_list)
     // })
 
-    this.topGoodsListQuery()
+    this.topGoodsListQuery({
+      page: 1
+    })
   },
-  topGoodsListQuery() {
+  topGoodsListQuery(data) {
     var that = this;
     //获取商品爆款列表
     api.TopGoodsListQuery({
-      method: "GET"
+      method: "GET",
+      data: data
     }).then(
       function(data) {
-        that.setData({
-          goodsRecommend: data.data.top_goods_list_get_response.list
-        })
+        if (data.page == 1) { //第一页
+          that.setData({
+            goodsRecommend: data.data.top_goods_list_get_response.list
+          })
+        } else {
+          that.setData({
+            goodsRecommend: that.data.goodsRecommend.concat(data.data.top_goods_list_get_response.list)
+          })
+        }
       })
   },
   tabSelect(e) { //栏目分类标签
     wx.showLoading({
       title: '加载中',
     });
-
     var that = this;
     this.setData({
       TabCur: e.currentTarget.dataset.id,
@@ -118,29 +130,50 @@ Page({
     if (data.opt_id == 0) { //热搜排行榜
       this.topGoodsListQuery(data)
     } else {
+
+      that.setData({
+        isShowMap: false
+      });
+
       api.GoodsSearch({
         data: data
-      }).then(function (data) {
-        that.setData({
-          goodsRecommend: data.goods_search_response.goods_list
-        })
+      }).then(function(data) {
+        if (data.goods_search_response.goods_list.length <= 0) { //没有更多了
+          that.setData({
+            loadingMoreHidden: false
+          })
+          return;
+        }
+
+        if (data.page == 1) { //第一页
+          that.setData({
+            goodsRecommend: data.goods_search_response.goods_list,
+          })
+        } else {
+          that.setData({
+            goodsRecommend: that.data.goodsRecommend.concat(data.goods_search_response.goods_list)
+          })
+        }
+
       })
     };
   },
-  // tabClick: function(e) {
-  //   let offset = e.currentTarget.offsetLeft;
-  //   if (offset > 150) {
-  //     offset = offset - 150
-  //   } else {
-  //     offset = 0;
-  //   }
-  //   this.setData({
-  //     activeCategoryId: e.currentTarget.id,
-  //     curPage: 1,
-  //     cateScrollTop: offset
-  //   });
-  //   this.getGoodsList(this.data.activeCategoryId);
-  // },
+  tabListSelect(e) {
+    this.setData({
+      TabListCur: e.currentTarget.dataset.id,
+    });
+    if (e.currentTarget.dataset.id == 3) {
+      if (this.data.priceUp) {
+        this.setData({
+          priceUp: false
+        })
+      } else {
+        this.setData({
+          priceUp: true
+        })
+      }
+    }
+  },
   toDetailsTap: function(e) {
     var goodsId = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -310,7 +343,7 @@ Page({
   //   });
   //   this.getGoodsList(this.data.activeCategoryId);
   // },
-  onReachBottom: function() {
+  onReachBottom: function() { //上滑加载更多
     wx.showLoading({
       title: '加载中...',
     })
@@ -325,7 +358,7 @@ Page({
       page: curPage
     })
   },
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function() { //下滑刷新
     wx.showLoading({
       title: '刷新中...',
     })
