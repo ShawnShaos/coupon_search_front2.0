@@ -23,7 +23,7 @@
 </swiper>
 
 
-<scroll-view scroll-x class="bg-white nav {{isShowMap?'':'hiddenMap' }}">
+<scroll-view scroll-x class="bg-white nav {{isShowSort?'':'hiddenMap' }}">
   <view class="flex text-center">
     <view class="cu-item flex-sub {{0==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="0">
       默认
