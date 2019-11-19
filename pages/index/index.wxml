@@ -5,7 +5,7 @@
 <view class="cu-bar search bg-red">
   <view class="search-form round">
     <text class="cuIcon-search"></text>
-    <input type="text" placeholder="搜搜优惠券" confirm-type="search"></input>
+    <input type="text" placeholder="搜搜优惠券" confirm-type="search" bindconfirm="searchBytitle"></input>
   </view>
 </view>
 

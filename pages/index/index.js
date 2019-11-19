@@ -66,7 +66,6 @@ Page({
     isShowSort: false, //是否显示销量价格排序导航
     priceUp: false, //价格排序设置，默认升序
     sort_type:0, //排序规则
-    opt_id:0 //商品栏目id
   },
   onLoad() {
     var that = this;
@@ -118,21 +117,21 @@ Page({
       TabCur: e.currentTarget.dataset.id,
       scrollLeft: (e.currentTarget.dataset.id - 1) * 60,
       activeCategoryId: e.currentTarget.dataset.opt_id,
-      opt_id: e.currentTarget.dataset.opt_id, //分类栏目id
       TabListCur:0,
+      sort_type: 0,
+      priceUp: false, //价格排序设置，默认升序
       curPage: 1
     })
   
 
-    this.goodsSearch({
-      page: 1
-    })
+    this.goodsSearch();
 
   },
-  goodsSearch: function(data) { //获取商品列表
-
+  goodsSearch: function() { //获取商品列表
+    var data = {};
     data.sort_type = this.data.sort_type; //排序方式
-    data.opt_id = this.data.opt_id; //分类栏目id
+    data.opt_id = this.data.activeCategoryId; //分类栏目id
+    data.page = this.data.curPage; //页码
 
     var that = this;
     if (data.opt_id == 0) { //热搜排行榜
@@ -185,6 +184,10 @@ Page({
           priceUp: true
         })
       }
+    }else{
+      this.setData({
+        priceUp: false
+      })
     };
 
     var sort_type = 0; //默认综合排序16
@@ -199,14 +202,11 @@ Page({
     };
 
     this.setData({
-      sort_type: sort_type
+      sort_type: sort_type,
+      curPage:1
     })
 
-    this.goodsSearch({
-      opt_id: that.data.opt_id, //分类栏目id
-      page: 1,
-      sort_type: sort_type
-    });
+    this.goodsSearch();
 
   },
   toDetailsTap: function(e) {
@@ -220,29 +220,23 @@ Page({
     wx.showLoading({
       title: '加载中...',
     })
-    var curPage = this.data.curPage + 1;
-    var activeCategoryId = this.data.activeCategoryId;
+    var that = this;
+   
     this.setData({
-      curPage: curPage
+      curPage: that.data.curPage + 1
     });
 
-    this.goodsSearch({
-      opt_id: activeCategoryId, //分类栏目id
-      page: curPage
-    })
+    this.goodsSearch();
   },
   onPullDownRefresh: function() { //下滑刷新
     wx.showLoading({
       title: '刷新中...',
     })
-    var activeCategoryId = this.data.activeCategoryId;
+    
     this.setData({
       curPage: 1
     });
-    this.goodsSearch({
-      opt_id: activeCategoryId, //分类栏目id
-      page: 1
-    })
+    this.goodsSearch();
     wx.stopPullDownRefresh()
   },
   // // 以下为搜索框事件
@@ -267,4 +261,28 @@ Page({
       inputVal: e.detail.value
     });
   },
+  searchBytitle:function(){  //搜索
+    api.GoodsSearch({
+      data: {
+
+      }
+    }).then(function (data) {
+      if (data.goods_search_response.goods_list.length <= 0) { //没有更多了
+        that.setData({
+          loadingMoreHidden: false
+        })
+        return;
+      }
+
+      if (that.data.curPage == 1) { //第一页
+        that.setData({
+          goodsRecommend: data.goods_search_response.goods_list,
+        })
+      } else {
+        that.setData({
+          goodsRecommend: that.data.goodsRecommend.concat(data.goods_search_response.goods_list)
+        })
+      }
+    })
+  }
 })

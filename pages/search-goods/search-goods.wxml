@@ -1,0 +1,2 @@
+<cu-custom bgColor="bg-red" isCustom="{{true}}"><view slot="content">搜索</view></cu-custom>
+<searchgoods></searchgoods>

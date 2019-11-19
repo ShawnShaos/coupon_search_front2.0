@@ -1,7 +1,9 @@
 {
   "pages": [
+    "pages/search-goods/search-goods",
     "pages/index/index",
     "pages/goods-details/goods-details"
+    
   ],
   "window": {
     "backgroundTextStyle": "light",
