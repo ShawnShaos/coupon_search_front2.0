@@ -58,14 +58,38 @@ Page({
     }],
 
 
+    hotKeyShow:false,
+    historyKeyList: [{
+      keyword: "羽绒服"
+    },
+    {
+      keyword: "秋裤"
+    },
+    {
+      keyword: "衬衫"
+    },
+    {
+      keyword: "毛衣"
+    },
+    {
+      keyword: "平底鞋"
+    },
+    {
+      keyword: "苹果手机ipone"
+    }
+    ],
+    hotKeyList: [],
     categoies: [],
     activeCategoryId: 0, //分类id
     curPage: 1,
     isShowMap: true, //是否显示轮播图和爆款推荐页以及排序选项
-    TabListCur: 0,
     isShowSort: false, //是否显示销量价格排序导航
+    isShowContent:true,  //是否显示搜索框以下内容
+    hidden:"display:none",
+    TabListCur: 0,
     priceUp: false, //价格排序设置，默认升序
     sort_type:0, //排序规则
+    goodsTitle: '',
   },
   onLoad() {
     var that = this;
@@ -170,6 +194,9 @@ Page({
     };
   },
   tabListSelect(e) {
+    wx.showLoading({
+      title: '加载中...',
+    })
     var that = this;
     this.setData({
       TabListCur: e.currentTarget.dataset.id,
@@ -283,6 +310,43 @@ Page({
           goodsRecommend: that.data.goodsRecommend.concat(data.goods_search_response.goods_list)
         })
       }
+    })
+  },
+
+  //搜索框双向绑定
+  adInputChange: function (e) {
+    let that = this;
+    if (e.detail.value.length < 1) {
+      that.setData({
+        goodsTitle: '商品名称',
+      })
+    } else {
+      that.setData({
+        goodsTitle: e.detail.value,
+      })
+    }
+  },
+  //取消搜索
+  channelSearch: function () {
+    this.setData({
+      hidden: "display:none;",
+      isShowContent: true,
+      hotKeyShow: false
+    })
+  },
+  //点击搜索框
+  getfocus: function () {
+    this.setData({
+      hidden: "",
+      isShowContent:false,
+      hotKeyShow:true
+    })
+  },
+  //根据标题搜索商品
+  goodsSearchBytitle:function(){
+    var title = this.data.goodsTitle;
+    wx.navigateTo({
+      url: "/search-goods/search-goods?title=" + title
     })
   }
 })

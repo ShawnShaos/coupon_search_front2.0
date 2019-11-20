@@ -1,2 +1,33 @@
-<cu-custom bgColor="bg-red" isCustom="{{true}}"><view slot="content">搜索</view></cu-custom>
-<searchgoods></searchgoods>
+<cu-custom bgColor="bg-red" isCustom="{{true}}">
+  <view slot="content">搜索</view>
+</cu-custom>
+
+<view class="cu-bar search bg-red">
+  <view class="search-form round">
+    <text class="cuIcon-search"></text>
+    <input type="text" placeholder="搜搜优惠券" bindinput="adInputChange" confirm-type="search"  bindconfirm="searchBytitle" bindfocus='getfocus'></input>
+  </view>
+  <view class="action" style="{{hidden}}" bindtap="channelSearch">
+    <text class="cuIcon-close"></text>
+    <text>取消</text>
+  </view>
+</view>
+
+<scroll-view scroll-x class="bg-white nav {{isShowSort?'':'hiddenMap' }}">
+  <view class="flex text-center">
+    <view class="cu-item flex-sub {{0==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="0">
+      默认
+    </view>
+    <view class="cu-item flex-sub {{1==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="1">
+      好评
+    </view>
+    <view class="cu-item flex-sub {{2==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="2">
+      销售
+    </view>
+    <view class="cu-item flex-sub  {{3==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="3">
+      价格
+      <text wx:if="{{3==TabListCur}}" class="cuIcon-{{priceUp?'fold':'unfold'}}" bindtap="priceChonese"></text>
+    </view>
+  </view>
+</scroll-view>
+

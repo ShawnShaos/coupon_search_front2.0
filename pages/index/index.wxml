@@ -5,10 +5,28 @@
 <view class="cu-bar search bg-red">
   <view class="search-form round">
     <text class="cuIcon-search"></text>
-    <input type="text" placeholder="搜搜优惠券" confirm-type="search" bindconfirm="searchBytitle"></input>
+    <input type="text" placeholder="搜搜优惠券" bindinput="adInputChange"  bindconfirm="goodsSearchBytitle" bindfocus='getfocus'></input>
+  </view>
+  <view class="action"   style="{{hidden}}" bindtap="channelSearch">
+    <text class="cuIcon-close"></text>
+    <text>取消</text>
   </view>
 </view>
 
+
+<view class="cont" wx:if="{{hotKeyShow}}">
+  <text class="font_14">历史搜索</text>
+  <view class="w100">
+    <button wx:for="{{historyKeyList}}" bindtap="doKeySearch"  wx:key data-id="{{index}}">{{item.keyword}}</button>
+  </view>
+  <text class="font_14">热门搜索</text>
+  <view class="w100">
+    <button wx:for="{{hotKeyList}}" bindtap="doKeySearch"  wx:key data-id="{{index}}">{{item.keyword}}</button>
+  </view>
+</view>
+
+
+<view class="{{isShowContent?'':'hiddenMap'}}">
 <scroll-view scroll-x class="bg-red nav" scroll-with-animation scroll-left="{{scrollLeft}}">
   <view class="cu-item" wx:for="{{categoies}}" wx:key bindtap="tabSelect" data-id="{{index}}" data-opt_id="{{item.opt_id}}">
     <span class="{{index==TabCur?'nav_title':''}} "> {{item.opt_name}} </span>
@@ -72,6 +90,10 @@
     <view class="weui-loadmore__tips weui-loadmore__tips_in-line">没有更多啦</view>
   </view>
 </view>
-<view class='coupons-float' bindtap="goCoupons">
+
+ 
+<view class="coupons-float" bindtap="goCoupons">
   <image src="/images/gift.png"></image>
+</view>
+
 </view>
