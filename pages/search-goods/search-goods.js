@@ -3,67 +3,48 @@ const api = require("../../utils/api")
 Page({
   data: {
     focus: true,
-    hotKeyShow: true,
-    historyKeyShow: true,
-    searchValue: '',
-    page: 0,
-    productData: [],
-    historyKeyList: [{
-        keyword: "羽绒服"
-      },
-      {
-        keyword: "秋裤"
-      },
-      {
-        keyword: "衬衫"
-      },
-      {
-        keyword: "毛衣"
-      },
-      {
-        keyword: "平底鞋"
-      },
-      {
-        keyword: "苹果手机ipone"
-      }
-    ],
+
+    historyKeyList: [], //历史搜索项
     hotKeyList: [],
 
-
+    goodsRecommend: [],
     hidden: "display:none;",
-    goodsTitle: '商品名称',
+    goodsTitle: '',
     categoies: [],
     activeCategoryId: 0, //分类id
     curPage: 1,
-    isShowMap: true, //是否显示轮播图和爆款推荐页以及排序选项
     TabListCur: 0,
     isShowSort: false, //是否显示销量价格排序导航
     priceUp: false, //价格排序设置，默认升序
     sort_type: 0, //排序规则
-
+    isShowContent: true,
+    hotKeyShow: false,
+    loadingMoreHidden: true
   },
-  async onLoad(e) {
-    this.data.goodsId = e.goodsId
-    this.reputation(e.goodsId); //获取商品详情
-  },
-  onReachBottom: function() {
-    //下拉加载更多多...
+  onLoad(e) {
+    var goodsTitle = e.goodsTitle;
+    console.log(goodsTitle);
+    this.dialog = this.selectComponent(".mydialog");
     this.setData({
-      page: (this.data.page + 10)
-    })
-
-    this.searchProductData();
+      goodsTitle: goodsTitle
+    });
+    this.goodsSearch();
   },
+  //点击历史搜索关键字
   doKeySearch: function(e) {
     var key = e.currentTarget.dataset.key;
     this.setData({
-      searchValue: key,
+      goodsTitle: key,
+      curPage: 1,
+      hidden: "display:none;",
       hotKeyShow: false,
-      historyKeyShow: false,
+      isShowContent: true
     });
-
-    this.data.productData.length = 0;
-    this.searchProductData();
+    wx.showLoading({
+      title: '搜索中...',
+    });
+    this.historyKeyStro();
+    this.goodsSearch();
   },
   doSearch: function() {
     var searchKey = this.data.searchValue;
@@ -91,9 +72,6 @@ Page({
     wx.getStorage({
       key: 'historyKeyList',
       success: function(res) {
-        console.log(res.data);
-
-        //console.log(res.data.indexOf(key))
         if (res.data.indexOf(key) >= 0) {
           return;
         }
@@ -149,76 +127,131 @@ Page({
       },
     });
   },
-  //点击加载更多
-  getMore: function(e) {
-    var that = this;
-    var page = that.data.page;
-    wx.request({
-      url: app.d.ceshiUrl + '/Api/Product/getlist',
-      method: 'post',
-      data: {
-        page: page,
-        brand_id: that.data.op_brand_id,
-        cat_id: that.data.op_cat_id,
-        ptype: that.data.op_ptype
-      },
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      success: function(res) {
-        var prolist = res.data.pro;
-        if (prolist == '') {
-          wx.showToast({
-            title: '没有更多数据！',
-            duration: 2000
-          });
-          return false;
-        }
-        //that.initProductData(data);
-        that.setData({
-          page: page + 1,
-          shopList: that.data.shopList.concat(prolist)
-        });
-        //endInitData
-      },
-      fail: function(e) {
-        wx.showToast({
-          title: '网络异常！',
-          duration: 2000
-        });
-      }
-    })
-  },
 
-  //搜索框双向绑定
-  adInputChange: function(e) {
-    let that = this;
-    if (e.detail.value.length < 1) {
-      that.setData({
-        goodsTitle: '商品名称',
-      })
-    } else {
-      that.setData({
-        goodsTitle: e.detail.value,
-      })
-    }
+  //失去焦点
+  blursearch() {
+    var goodsTitle = this.data.goodsTitle;
+
+    this.setData({
+      goodsTitle: goodsTitle
+    })
   },
   //取消搜索
   channelSearch: function() {
     this.setData({
-      hidden: "display:none;"
+      hidden: "display:none;",
+      hotKeyShow: false,
+      isShowContent: true
     })
   },
   //确认模糊搜索
-  searchBytitle: function() {
-    var title = this.data.goodsTitle;
+  searchBytitle: function(e) {
 
-    console.log("ssss")
-  },
-  getfocus: function() {
-    this.setData({
-      hidden: ""
+    var goodsTitleInput = e.detail.value.replace(/^\s+|\s+$/g, ""); //去前后空格
+    if (goodsTitleInput != undefined && goodsTitleInput != '') {
+      this.setData({
+        goodsTitle: goodsTitleInput,
+      })
+    } else {
+      this.dialog.show("请输入商品名称");
+      return;
+    }
+
+    wx.showLoading({
+      title: '搜索中...',
     })
+    this.setData({
+      curPage: 1,
+      hidden: 'display:none',
+      hotKeyShow: false,
+      isShowContent: true
+    });
+
+    this.historyKeyStro();
+    this.goodsSearch();
+  },
+  //缓存历史搜索策略
+  historyKeyStro: function() {
+    var goodsTitle = this.data.goodsTitle;
+    if (goodsTitle.length > 0) {
+      var historyKeyList = [];
+      var historyKeyListStor = wx.getStorageSync('historyKeyList');
+      if (historyKeyListStor) { //存在历史搜索记录
+        for (var i = 0; i < historyKeyListStor.length; i++) {
+          if (historyKeyListStor[i].keyword == goodsTitle) {
+            historyKeyListStor.splice(i, 1);
+          }
+        }
+        if (historyKeyListStor.length > 20) {
+          historyKeyListStor = historyKeyListStor.slice(0, 20)
+        }
+        historyKeyList = historyKeyListStor;
+      }
+      historyKeyList.unshift({ //在第一位插入一个元素
+        keyword: goodsTitle
+      });
+      //缓存历史搜索项
+      wx.setStorageSync('historyKeyList', historyKeyList)
+    }
+  },
+  //聚焦搜索框
+  getfocus: function() {
+
+    var historyKeyListStor = wx.getStorageSync('historyKeyList');
+
+    if (historyKeyListStor) {
+      this.setData({
+        historyKeyList: historyKeyListStor
+      })
+    };
+    this.setData({
+      hidden: "",
+      hotKeyShow: true,
+      isShowContent: false
+    });
+  },
+  tabListSelect(e) {
+    wx.showLoading({
+      title: '加载中...',
+    })
+    var that = this;
+    this.setData({
+      TabListCur: e.currentTarget.dataset.id,
+    });
+    if (e.currentTarget.dataset.id == 3) {
+      if (this.data.priceUp) {
+        this.setData({
+          priceUp: false
+        })
+      } else {
+        this.setData({
+          priceUp: true
+        })
+      }
+    } else {
+      this.setData({
+        priceUp: false
+      })
+    };
+
+    var sort_type = 0; //默认综合排序16
+    if (e.currentTarget.dataset.id == 1) { //好评
+      sort_type = 16;
+    } else if (e.currentTarget.dataset.id == 2) { //销量降序
+      sort_type = 6;
+    } else if (e.currentTarget.dataset.id == 3 && this.data.priceUp) { //价格升序
+      sort_type = 3;
+    } else if (e.currentTarget.dataset.id == 3 && !this.data.priceUp) { //价格降序
+      sort_type = 4;
+    };
+
+    this.setData({
+      sort_type: sort_type,
+      curPage: 1
+    })
+
+    this.goodsSearch();
+
   },
   //搜索商品
   goodsSearch: function() { //获取商品列表
@@ -229,10 +262,6 @@ Page({
 
     var that = this;
 
-    this.setData({
-      isShowSort: true
-    });
-
     api.GoodsSearch({
       data: data
     }).then(function(data) {
@@ -240,9 +269,8 @@ Page({
         that.setData({
           loadingMoreHidden: false
         })
-        return;
       }
-
+      
       if (that.data.curPage == 1) { //第一页
         that.setData({
           goodsRecommend: data.goods_search_response.goods_list,
@@ -255,4 +283,23 @@ Page({
 
     })
   },
+  toDetailsTap: function(e) {
+    var goodsId = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: "/pages/goods-details/goods-details?goodsId=" + goodsId
+    })
+  },
+  onReachBottom: function() { //上滑加载更多
+    wx.showLoading({
+      title: '加载中...',
+    })
+    var that = this;
+
+    this.setData({
+      curPage: that.data.curPage + 1
+    });
+
+    this.goodsSearch();
+  },
+
 });

@@ -1,6 +1,7 @@
 {
   "enablePullDownRefresh": true,
   "usingComponents": {
-    "protuctlist": "/components/protuctlist/protuctlist"
+    "protuctlist": "/components/protuctlist/protuctlist",
+    "components-toast": "/components/toast/toast"
   }
 }

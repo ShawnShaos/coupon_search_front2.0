@@ -58,38 +58,20 @@ Page({
     }],
 
 
-    hotKeyShow:false,
-    historyKeyList: [{
-      keyword: "羽绒服"
-    },
-    {
-      keyword: "秋裤"
-    },
-    {
-      keyword: "衬衫"
-    },
-    {
-      keyword: "毛衣"
-    },
-    {
-      keyword: "平底鞋"
-    },
-    {
-      keyword: "苹果手机ipone"
-    }
-    ],
+    hotKeyShow: false,
+    historyKeyList: [], //历史搜索框，最多20个
     hotKeyList: [],
     categoies: [],
     activeCategoryId: 0, //分类id
     curPage: 1,
     isShowMap: true, //是否显示轮播图和爆款推荐页以及排序选项
     isShowSort: false, //是否显示销量价格排序导航
-    isShowContent:true,  //是否显示搜索框以下内容
-    hidden:"display:none",
+    isShowContent: true, //是否显示搜索框以下内容
+    hidden: "display:none",
     TabListCur: 0,
     priceUp: false, //价格排序设置，默认升序
-    sort_type:0, //排序规则
-    goodsTitle: '',
+    sort_type: 0, //排序规则
+    goodsTitle:'',
   },
   onLoad() {
     var that = this;
@@ -108,7 +90,7 @@ Page({
     // }).then(function(data){
     //   console.log(data.goods_opt_get_response.goods_opt_list)
     // })
-
+    this.dialog = this.selectComponent(".mydialog");
     this.topGoodsListQuery({
       page: 1
     })
@@ -121,7 +103,7 @@ Page({
       data: data
     }).then(
       function(data) {
-        if (data.page == 1) { //第一页
+        if (that.data.curPage == 1) { //第一页
           that.setData({
             goodsRecommend: data.data.top_goods_list_get_response.list
           })
@@ -141,12 +123,12 @@ Page({
       TabCur: e.currentTarget.dataset.id,
       scrollLeft: (e.currentTarget.dataset.id - 1) * 60,
       activeCategoryId: e.currentTarget.dataset.opt_id,
-      TabListCur:0,
+      TabListCur: 0,
       sort_type: 0,
       priceUp: false, //价格排序设置，默认升序
       curPage: 1
     })
-  
+
 
     this.goodsSearch();
 
@@ -163,6 +145,7 @@ Page({
         isShowMap: true,
         isShowSort: false
       });
+      data.sort_type = 1  //1-实时热销榜；2-实时收益榜
       this.topGoodsListQuery(data)
     } else {
       that.setData({
@@ -179,7 +162,7 @@ Page({
           })
           return;
         }
-        
+
         if (that.data.curPage == 1) { //第一页
           that.setData({
             goodsRecommend: data.goods_search_response.goods_list,
@@ -211,26 +194,26 @@ Page({
           priceUp: true
         })
       }
-    }else{
+    } else {
       this.setData({
         priceUp: false
       })
     };
 
     var sort_type = 0; //默认综合排序16
-    if (e.currentTarget.dataset.id == 1) {  //好评
+    if (e.currentTarget.dataset.id == 1) { //好评
       sort_type = 16;
-    } else if (e.currentTarget.dataset.id == 2){  //销量降序
+    } else if (e.currentTarget.dataset.id == 2) { //销量降序
       sort_type = 6;
-    } else if (e.currentTarget.dataset.id == 3 && this.data.priceUp) {  //价格升序
+    } else if (e.currentTarget.dataset.id == 3 && this.data.priceUp) { //价格升序
       sort_type = 3;
-    } else if (e.currentTarget.dataset.id == 3 && !this.data.priceUp) {  //价格降序
+    } else if (e.currentTarget.dataset.id == 3 && !this.data.priceUp) { //价格降序
       sort_type = 4;
     };
 
     this.setData({
       sort_type: sort_type,
-      curPage:1
+      curPage: 1
     })
 
     this.goodsSearch();
@@ -242,13 +225,13 @@ Page({
       url: "/pages/goods-details/goods-details?goodsId=" + goodsId
     })
   },
-  
+
   onReachBottom: function() { //上滑加载更多
     wx.showLoading({
       title: '加载中...',
     })
     var that = this;
-   
+
     this.setData({
       curPage: that.data.curPage + 1
     });
@@ -259,7 +242,7 @@ Page({
     wx.showLoading({
       title: '刷新中...',
     })
-    
+
     this.setData({
       curPage: 1
     });
@@ -288,46 +271,9 @@ Page({
       inputVal: e.detail.value
     });
   },
-  searchBytitle:function(){  //搜索
-    api.GoodsSearch({
-      data: {
 
-      }
-    }).then(function (data) {
-      if (data.goods_search_response.goods_list.length <= 0) { //没有更多了
-        that.setData({
-          loadingMoreHidden: false
-        })
-        return;
-      }
-
-      if (that.data.curPage == 1) { //第一页
-        that.setData({
-          goodsRecommend: data.goods_search_response.goods_list,
-        })
-      } else {
-        that.setData({
-          goodsRecommend: that.data.goodsRecommend.concat(data.goods_search_response.goods_list)
-        })
-      }
-    })
-  },
-
-  //搜索框双向绑定
-  adInputChange: function (e) {
-    let that = this;
-    if (e.detail.value.length < 1) {
-      that.setData({
-        goodsTitle: '商品名称',
-      })
-    } else {
-      that.setData({
-        goodsTitle: e.detail.value,
-      })
-    }
-  },
   //取消搜索
-  channelSearch: function () {
+  channelSearch: function() {
     this.setData({
       hidden: "display:none;",
       isShowContent: true,
@@ -335,18 +281,66 @@ Page({
     })
   },
   //点击搜索框
-  getfocus: function () {
+  getfocus: function() {
+
+    var historyKeyListStor = wx.getStorageSync('historyKeyList');
+
+    if (historyKeyListStor) {
+      this.setData({
+        historyKeyList: historyKeyListStor
+      })
+    };
+
     this.setData({
       hidden: "",
-      isShowContent:false,
-      hotKeyShow:true
+      isShowContent: false,
+      hotKeyShow: true
     })
   },
   //根据标题搜索商品
-  goodsSearchBytitle:function(){
-    var title = this.data.goodsTitle;
+  searchBytitle: function(e) {
+    var goodsTitleInput = e.detail.value.replace(/^\s+|\s+$/g, ""); //去前后空格
+    if (goodsTitleInput != undefined && goodsTitleInput != '') {
+      this.setData({
+        goodsTitle: goodsTitleInput,
+      })
+    } else {
+      this.dialog.show("请输入商品名称");
+      return;
+    }
+
+    this.historyKeyStro();
     wx.navigateTo({
-      url: "/search-goods/search-goods?title=" + title
+      url: "/pages/search-goods/search-goods?goodsTitle=" + goodsTitleInput
     })
-  }
+  },
+  historyKeyStro: function () {
+    var goodsTitle = this.data.goodsTitle;
+    if (goodsTitle.length > 0) {
+      var historyKeyList = [];
+      var historyKeyListStor = wx.getStorageSync('historyKeyList');
+      if (historyKeyListStor) { //存在历史搜索记录
+        for (var i = 0; i < historyKeyListStor.length; i++) {
+          if (historyKeyListStor[i].keyword == goodsTitle) {
+            historyKeyListStor.splice(i, 1);
+          }
+        }
+        if (historyKeyListStor.length > 20) {
+          historyKeyListStor = historyKeyListStor.slice(0, 20)
+        }
+        historyKeyList = historyKeyListStor;
+      }
+      historyKeyList.unshift({ //在第一位插入一个元素
+        keyword: goodsTitle
+      });
+      //缓存历史搜索项
+      wx.setStorageSync('historyKeyList', historyKeyList)
+    }
+  },
+  //失去焦点
+  blursearch() {
+    this.setData({
+      goodsTitle: ""
+    })
+  },
 })

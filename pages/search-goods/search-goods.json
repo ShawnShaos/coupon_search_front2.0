@@ -1,5 +1,7 @@
 {
   "usingComponents": {
-    "searchgoods": "/components/searchBox/index"
+    "searchgoods": "/components/searchBox/index",
+    "protuctlist": "/components/protuctlist/protuctlist",
+    "components-toast": "/components/toast/toast"
   }
 }

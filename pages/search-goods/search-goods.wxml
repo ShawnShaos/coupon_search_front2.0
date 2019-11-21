@@ -5,7 +5,7 @@
 <view class="cu-bar search bg-red">
   <view class="search-form round">
     <text class="cuIcon-search"></text>
-    <input type="text" placeholder="搜搜优惠券" bindinput="adInputChange" confirm-type="search"  bindconfirm="searchBytitle" bindfocus='getfocus'></input>
+    <input type="text" value="{{goodsTitle}}" placeholder="搜搜优惠券" bindblur="blursearch" confirm-type="search" bindconfirm="searchBytitle" bindfocus='getfocus'></input>
   </view>
   <view class="action" style="{{hidden}}" bindtap="channelSearch">
     <text class="cuIcon-close"></text>
@@ -13,21 +13,50 @@
   </view>
 </view>
 
-<scroll-view scroll-x class="bg-white nav {{isShowSort?'':'hiddenMap' }}">
-  <view class="flex text-center">
-    <view class="cu-item flex-sub {{0==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="0">
-      默认
+<view class="cont" wx:if="{{hotKeyShow}}">
+  <text class="font_14">历史搜索</text>
+  <view class="w100">
+    <button wx:for="{{historyKeyList}}" bindtap="doKeySearch" wx:key data-key="{{item.keyword}}">{{item.keyword}}</button>
+  </view>
+  <text class="font_14">热门搜索</text>
+  <view class="w100">
+    <button wx:for="{{hotKeyList}}" bindtap="doKeySearch" wx:key data-id="{{index}}">{{item.keyword}}</button>
+  </view>
+</view>
+
+
+<view class="{{isShowContent?'':'hiddenMap'}}">
+
+  <scroll-view scroll-x class="bg-white nav">
+    <view class="flex text-center">
+      <view class="cu-item flex-sub {{0==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="0">
+        默认
+      </view>
+      <view class="cu-item flex-sub {{1==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="1">
+        好评
+      </view>
+      <view class="cu-item flex-sub {{2==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="2">
+        销售
+      </view>
+      <view class="cu-item flex-sub  {{3==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="3">
+        价格
+        <text wx:if="{{3==TabListCur}}" class="cuIcon-{{priceUp?'fold':'unfold'}}" bindtap="priceChonese"></text>
+      </view>
     </view>
-    <view class="cu-item flex-sub {{1==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="1">
-      好评
-    </view>
-    <view class="cu-item flex-sub {{2==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="2">
-      销售
-    </view>
-    <view class="cu-item flex-sub  {{3==TabListCur?'text-red':''}}" bindtap="tabListSelect" data-id="3">
-      价格
-      <text wx:if="{{3==TabListCur}}" class="cuIcon-{{priceUp?'fold':'unfold'}}" bindtap="priceChonese"></text>
+  </scroll-view>
+
+
+  <view class='space'></view>
+
+  <view class="goods-container">
+    <view class="goods-box" wx:for-items="{{goodsRecommend}}" wx:key="{{index}}" bindtap="toDetailsTap" data-id="{{item.goods_id}}">
+      <protuctlist goods_thumbnail_url="{{item.goods_thumbnail_url}}" goods_name="{{item.goods_name}}" coupon_discount="{{item.coupon_discount}}" min_group_price="{{item.min_group_price}}" min_normal_price="{{item.min_normal_price}}" sales_tip="{{item.sales_tip}}"></protuctlist>
     </view>
   </view>
-</scroll-view>
+  <view hidden="{{loadingMoreHidden ? true : false}}" class="weui-loadmore weui-loadmore_line" style='margin-top:60rpx;margin-bottom:30rpx;'>
+    <view class="weui-loadmore__tips weui-loadmore__tips_in-line">没有更多啦</view>
+  </view>
 
+</view>
+
+<components-toast class='mydialog'></components-toast> 
