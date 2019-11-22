@@ -14,14 +14,17 @@
 </view>
 
 <view class="cont" wx:if="{{hotKeyShow}}">
-  <text class="font_14">历史搜索</text>
+
+
+
+  <text class="font_14">历史搜索</text> <text style="float: right;" class="cuIcon-close lg text-gray" bindtap="deleteHistoryKeyList">删除</text>
   <view class="w100">
     <button wx:for="{{historyKeyList}}" bindtap="doKeySearch" wx:key data-key="{{item.keyword}}">{{item.keyword}}</button>
   </view>
-  <text class="font_14">热门搜索</text>
+  <!-- <text class="font_14">热门搜索</text>
   <view class="w100">
     <button wx:for="{{hotKeyList}}" bindtap="doKeySearch" wx:key data-id="{{index}}">{{item.keyword}}</button>
-  </view>
+  </view> -->
 </view>
 
 
@@ -57,6 +60,10 @@
     <view class="weui-loadmore__tips weui-loadmore__tips_in-line">没有更多啦</view>
   </view>
 
+
+<view class="coupons-float {{showGoTop?'':'hiddenMap' }}"  bindtap="goTop">
+  <image src="/images/top.png"></image>
+</view>
 </view>
 
 <components-toast class='mydialog'></components-toast> 

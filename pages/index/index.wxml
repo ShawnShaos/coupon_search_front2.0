@@ -15,14 +15,14 @@
 
 
 <view class="cont" wx:if="{{hotKeyShow}}">
-  <text class="font_14">历史搜索</text>
+  <text class="font_14">历史搜索</text>  <text style="float: right;" class="cuIcon-close lg text-gray" bindtap="deleteHistoryKeyList">删除</text>
   <view class="w100">
     <button wx:for="{{historyKeyList}}" bindtap="doKeySearch" wx:key data-key="{{item.keyword}}">{{item.keyword}}</button>
   </view>
-  <text class="font_14">热门搜索</text>
+  <!-- <text class="font_14">热门搜索</text>
   <view class="w100">
     <button wx:for="{{hotKeyList}}" bindtap="doKeySearch" wx:key data-id="{{index}}">{{item.keyword}}</button>
-  </view>
+  </view> -->
 </view>
 
 
@@ -33,12 +33,12 @@
   </view>
 </scroll-view>
 
-<swiper class="screen-swiper round-dot {{isShowMap?'':'hiddenMap' }}" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
+<!-- <swiper class="screen-swiper round-dot {{isShowMap?'':'hiddenMap' }}" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
   <swiper-item wx:for="{{swiperList}}" wx:key>
     <image src="{{item.url}}" mode="aspectFill" wx:if="{{item.type=='image'}}"></image>
     <video src="{{item.url}}" autoplay loop muted show-play-btn="{{false}}" controls="{{false}}" objectFit="cover" wx:if="{{item.type=='video'}}"></video>
   </swiper-item>
-</swiper>
+</swiper> -->
 
 
 <scroll-view scroll-x class="bg-white nav {{isShowSort?'':'hiddenMap' }}">
@@ -92,10 +92,9 @@
 </view>
 
  
-<view class="coupons-float" bindtap="goCoupons">
-  <image src="/images/gift.png"></image>
+<view class="coupons-float {{showGoTop?'':'hiddenMap' }}"  bindtap="goTop">
+  <image src="/images/top.png"></image>
 </view>
-
 </view>
 
 <components-toast class='mydialog'></components-toast> 

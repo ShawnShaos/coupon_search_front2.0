@@ -19,7 +19,8 @@ Page({
     sort_type: 0, //排序规则
     isShowContent: true,
     hotKeyShow: false,
-    loadingMoreHidden: true
+    loadingMoreHidden: true,
+    showGoTop: false
   },
   onLoad(e) {
     var goodsTitle = e.goodsTitle;
@@ -301,5 +302,43 @@ Page({
 
     this.goodsSearch();
   },
-
+  // 获取滚动条当前位置，并显隐按钮
+  onPageScroll: function (e) {
+    if (e.scrollTop > 200) {
+      this.setData({
+        showGoTop: true
+      })
+    } else {
+      this.setData({
+        showGoTop: false
+      })
+    }
+  },
+  // 回到顶部
+  goTop: function (e) {
+    if (wx.pageScrollTo) {
+      wx.pageScrollTo({
+        scrollTop: 0
+      })
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+      })
+    }
+  },
+  deleteHistoryKeyList: function () {
+    var that = this;
+    wx.showModal({
+      content: '确认删除全部历史记录？',
+      success(res) {
+        if (res.confirm) {
+          wx.removeStorageSync('historyKeyList');
+          that.setData({
+            historyKeyList: []
+          })
+        }
+      }
+    })
+  }
 });

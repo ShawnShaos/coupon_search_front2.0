@@ -222,9 +222,9 @@ swiper-item image {
 }
 
 .coupons-float image {
-  width: 60rpx;
-  height: 60rpx;
-  margin-top: 10rpx;
+  width: 50rpx;
+  height: 55rpx;
+  margin-top: 15rpx;
 }
 
 .tuan {
