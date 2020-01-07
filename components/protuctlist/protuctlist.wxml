@@ -13,8 +13,8 @@
   </view>
   <view class="price-and">
     <view class="price-totle">
-      <view class="price-now">¥{{min_group_price/100}}</view>
-      <view class="pice-init"> ¥{{min_normal_price/100}}</view>
+      <view class="price-now">¥{{(min_group_price - coupon_discount)/100}}</view>
+      <view class="pice-init"> ¥{{min_group_price/100}}</view>
     </view>
     <view class="other-options">
       <view class="sales-volume">销量:{{sales_tip}}</view>

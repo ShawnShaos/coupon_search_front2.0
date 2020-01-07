@@ -52,13 +52,12 @@ Page({
       }
     }).then(function(e) {
       if (e.data.error_response == undefined) {
+        var app_id = e.data.goods_promotion_url_generate_response.goods_promotion_url_list[0].we_app_info.app_id
         var path = e.data.goods_promotion_url_generate_response.goods_promotion_url_list[0].we_app_info.page_path
         wx.navigateToMiniProgram({
-          appId: api.appId,
+          appId: app_id,
           path: path,
-          success(res) {
-
-          }
+          success(res) {}
         })
       } else {
 

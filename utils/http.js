@@ -1,7 +1,7 @@
 /**
  * 封装http 请求方法
  */
-const apiUrl = "http://localhost:8080"; //服务器api地址
+const apiUrl = "https://lyself.city"; //服务器api地址
 var requestApi;
 const http = (params) => {
   //返回promise 对象

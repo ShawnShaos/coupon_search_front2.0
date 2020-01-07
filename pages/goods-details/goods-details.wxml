@@ -18,10 +18,10 @@
     <view class="goods-prices">
       <view class="price-now">
         <span>券后 </span>
-        ¥{{goodsDetail.min_group_price/100}}
+        ¥{{(goodsDetail.min_group_price - goodsDetail.coupon_discount)/100}}
       </view>
       <view class="store-name">{{goodsDetail.mall_name}}</view>
-      <view class="price-old">¥{{goodsDetail.min_normal_price/100}}</view>
+      <view class="price-old">¥{{goodsDetail.min_group_price/100}}</view>
       <view class="sale-number">销量{{goodsDetail.sales_tip}}</view>
     </view>
 
@@ -51,7 +51,7 @@
 
   <view class="goods-des-info">
     <view class="label-title">商品介绍</view>
-    <image wx:for="{{goodsDetail.goods_gallery_urls}}" wx:key="{{index}}" src="{{item}}" style="width:100%;height:750rpx;" lazy-load="true" />
+    <image wx:for="{{goodsDetail.goods_gallery_urls}}" wx:key="index" src="{{item}}" style="width:100%;height:750rpx;" lazy-load="true" />
   </view>
 
   <view class="footer-box">

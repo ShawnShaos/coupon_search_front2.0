@@ -28,7 +28,7 @@
 
 <view class="{{isShowContent?'':'hiddenMap'}}">
 <scroll-view scroll-x class="bg-red nav" scroll-with-animation scroll-left="{{scrollLeft}}">
-  <view class="cu-item" wx:for="{{categoies}}" wx:key bindtap="tabSelect" data-id="{{index}}" data-opt_id="{{item.opt_id}}">
+  <view class="cu-item" wx:for="{{categoies}}" wx:key="index" bindtap="tabSelect" data-id="{{index}}" data-opt_id="{{item.opt_id}}">
     <span class="{{index==TabCur?'nav_title':''}} "> {{item.opt_name}} </span>
   </view>
 </scroll-view>
@@ -81,7 +81,7 @@
   </view>
 
   <view class="goods-container">
-    <view class="goods-box" wx:for-items="{{goodsRecommend}}" wx:key="{{index}}" bindtap="toDetailsTap" data-id="{{item.goods_id}}">
+    <view class="goods-box" wx:for-items="{{goodsRecommend}}" wx:key="index" bindtap="toDetailsTap" data-id="{{item.goods_id}}">
       <protuctlist goods_thumbnail_url="{{item.goods_thumbnail_url}}" goods_name="{{item.goods_name}}" coupon_discount="{{item.coupon_discount}}" min_group_price="{{item.min_group_price}}" min_normal_price="{{item.min_normal_price}}" sales_tip="{{item.sales_tip}}"></protuctlist>
     </view>
 

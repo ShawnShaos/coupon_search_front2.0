@@ -5,7 +5,6 @@ import {
   http
 } from 'http.js'
 
-const APPID = "wx32540bd863b27570"
 
 var url = {
   userLogin: "/user/login",
@@ -22,7 +21,6 @@ var url = {
 
 }
 module.exports = {
-  appId : APPID,
   userLogin(code) {
     return http({
       url: url.userLogin,

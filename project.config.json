@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": false,
 		"enhance": true,
 		"postcss": true,
@@ -13,6 +13,8 @@
 		"coverView": true,
 		"nodeModules": false,
 		"autoAudits": false,
+		"showShadowRootInWxmlPanel": true,
+		"scopeDataCheck": false,
 		"uglifyFileName": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
@@ -24,9 +26,9 @@
 		}
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.9.1",
-	"appid": "wx50e6fd332b3aebf6",
-	"projectname": "%E5%88%B8%E6%90%9C%E7%B4%A22.0",
+	"libVersion": "2.10.0",
+	"appid": "wxedd485bcce5457c3",
+	"projectname": "%E5%88%B8%E5%A4%9A%E7%9C%81%E9%92%B1",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
